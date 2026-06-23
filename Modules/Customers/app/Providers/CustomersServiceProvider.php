@@ -4,6 +4,8 @@ namespace Modules\Customers\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Customers\Repositories\CustomerRepository;
+use Modules\Customers\Repositories\CustomerRepositoryInterface;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -34,6 +36,13 @@ class CustomersServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+
+        $this->app->bind(
+            CustomerRepositoryInterface::class,
+            CustomerRepository::class
+        );
+
+
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }

@@ -14,6 +14,9 @@ use Modules\Customers\Http\Controllers\CustomersController;
  *
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('customers', CustomersController::class)->names('customers');
+Route::prefix('v1')->group(function () {
+    Route::get(
+        'customers/select',
+        [CustomersController::class, 'select']
+    )->name('customers.select');
 });
