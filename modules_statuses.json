@@ -1,4 +1,5 @@
 {
     "Customers": true,
-    "Invoices": true
+    "Invoices": true,
+    "Auth": true
 }

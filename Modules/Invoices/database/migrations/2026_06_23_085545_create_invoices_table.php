@@ -22,8 +22,7 @@ return new class extends Migration
             $table->decimal('tax_amount', 10, 2)->default(0.00);
             $table->decimal('shipping_amount', 10, 2)->default(0.00);
             $table->decimal('total_amount', 10, 2)->default(0.00);
-
-            $table->decimal('shipping_amount', 12, 2)->default(0);
+ 
 
             $table->text('notes')->nullable();
             $table->timestamps();

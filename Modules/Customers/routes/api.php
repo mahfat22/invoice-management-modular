@@ -15,6 +15,12 @@ use Modules\Customers\Http\Controllers\CustomersController;
 */
 
 Route::prefix('v1')->group(function () {
+
+    Route::get('/', [CustomersController::class, 'index']);
+
+    Route::post('/', [CustomersController::class, 'store']);
+
+
     Route::get(
         'customers/select',
         [CustomersController::class, 'select']

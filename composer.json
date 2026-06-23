@@ -9,6 +9,7 @@
         "php": "^8.2",
         "baidouabdellah/laravel-arpdf": "^3.0",
         "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.3",
         "laravel/tinker": "^2.10.1",
         "nwidart/laravel-modules": "12.0"
     },
@@ -26,12 +27,17 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Modules\\": "Modules/" ,
+
+            "Modules\\": "Modules/",
+
             "Modules\\Customers\\": "Modules/Customers/app/",
             "Modules\\Customers\\Database\\Seeders\\": "Modules/Customers/database/seeders/",
 
             "Modules\\Invoices\\": "Modules/Invoices/app/",
-            "Modules\\Invoices\\Database\\Seeders\\": "Modules/Invoices/database/seeders/"
+            "Modules\\Invoices\\Database\\Seeders\\": "Modules/Invoices/database/seeders/",
+
+            "Modules\\Auth\\": "Modules/Auth/app/",
+            "Modules\\Auth\\Database\\Seeders\\": "Modules/Auth/database/seeders/"
         }
     },
     "autoload-dev": {
