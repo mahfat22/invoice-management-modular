@@ -3,32 +3,37 @@
 namespace Modules\Invoices\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Modules\Invoices\DTOs\CreateInvoiceDTO;
+use Modules\Invoices\Http\Requests\StoreInvoiceRequest;
+use Modules\Invoices\Services\InvoiceService;
+use Modules\Invoices\Transformers\InvoiceResource;
 
 class InvoicesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return view('invoices::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('invoices::create');
-    }
-
+    public function __construct(
+        protected InvoiceService $invoiceService
+    ) {}
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreInvoiceRequest $request)
     {
-        //
+        $dto = new CreateInvoiceDTO(
+            ...$request->validated()
+        );
+
+        $invoice = $this->invoiceService->createInvoice($dto);
+
+        return response()->success(
+            data: new InvoiceResource(
+                $invoice->load([
+                    'customer',
+                    'items',
+                ])
+            ),
+            message: 'Invoice created successfully.',
+            status: 201
+        );
     }
 
     /**
@@ -36,30 +41,16 @@ class InvoicesController extends Controller
      */
     public function show($id)
     {
-        return view('invoices::show');
+        $invoice = $this->invoiceService->getInvoice($id);
+
+        return response()->success(
+            data: new InvoiceResource(
+                $invoice->load([
+                    'customer',
+                    'items',
+                ])
+            )
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('invoices::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

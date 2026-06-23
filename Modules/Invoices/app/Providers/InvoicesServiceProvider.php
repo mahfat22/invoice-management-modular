@@ -3,7 +3,10 @@
 namespace Modules\Invoices\Providers;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
+use Modules\Invoices\Repositories\InvoiceRepository;
+use Modules\Invoices\Repositories\InvoiceRepositoryInterface;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -27,6 +30,22 @@ class InvoicesServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        Response::macro('success', function (
+            mixed $data = null,
+            ?string $message = null,
+            int $status = 200,
+            array $meta = []
+        ) {
+            $payload = array_filter([
+                'success' => true,
+                'message' => $message,
+                'data' => $data,
+                'meta' => $meta ?: null,
+            ], static fn ($v) => $v !== null);
+
+            return response()->json($payload, $status);
+        });
     }
 
     /**
@@ -34,6 +53,11 @@ class InvoicesServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(
+            InvoiceRepositoryInterface::class,
+            InvoiceRepository::class
+        );
+
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }

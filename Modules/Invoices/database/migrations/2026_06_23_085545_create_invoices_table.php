@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number')->unique();
-            
+
             $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
 
             $table->decimal('subtotal', 10, 2)->default(0.00);
@@ -22,6 +22,8 @@ return new class extends Migration
             $table->decimal('tax_amount', 10, 2)->default(0.00);
             $table->decimal('shipping_amount', 10, 2)->default(0.00);
             $table->decimal('total_amount', 10, 2)->default(0.00);
+
+            $table->decimal('shipping_amount', 12, 2)->default(0);
 
             $table->text('notes')->nullable();
             $table->timestamps();

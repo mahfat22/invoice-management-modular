@@ -14,6 +14,3 @@ use Modules\Invoices\Http\Controllers\InvoicesController;
 |
 */
 
-Route::group([], function () {
-    Route::resource('invoices', InvoicesController::class)->names('invoices');
-});
