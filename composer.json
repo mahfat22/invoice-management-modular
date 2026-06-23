@@ -27,7 +27,10 @@
             "Database\\Seeders\\": "database/seeders/",
             "Modules\\": "Modules/" ,
             "Modules\\Customers\\": "Modules/Customers/app/",
-            "Modules\\Customers\\Database\\Seeders\\": "Modules/Customers/database/seeders/"
+            "Modules\\Customers\\Database\\Seeders\\": "Modules/Customers/database/seeders/",
+
+            "Modules\\Invoices\\": "Modules/Invoices/app/",
+            "Modules\\Invoices\\Database\\Seeders\\": "Modules/Invoices/database/seeders/"
         }
     },
     "autoload-dev": {
