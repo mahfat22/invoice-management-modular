@@ -3,6 +3,7 @@
 namespace Modules\Invoices\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Baidouabdellah\LaravelArpdf\Facades\ArPDF;
 use Modules\Invoices\DTOs\CreateInvoiceDTO;
 use Modules\Invoices\Http\Requests\StoreInvoiceRequest;
 use Modules\Invoices\Services\InvoiceService;
@@ -53,4 +54,16 @@ class InvoicesController extends Controller
         );
     }
 
+
+    public function pdf($id)
+    {
+        $invoice = $this->invoiceService->getInvoice($id);
+
+        return ArPDF::loadView(
+            'invoices::pdf.invoice',
+            compact('invoice')
+        )->stream(
+            "invoice-{$invoice->invoice_number}.pdf"
+        );
+    }
 }

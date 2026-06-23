@@ -17,4 +17,9 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('invoices', InvoicesController::class)
         ->only(['store', 'show'])
         ->names('invoices');
+
+    Route::get(
+        'invoices/{invoice}/pdf',
+        [InvoicesController::class, 'pdf']
+    )->name('api.invoices.pdf');
 });

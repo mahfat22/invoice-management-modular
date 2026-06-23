@@ -32,8 +32,6 @@ class InvoiceService
             $taxAmount = 0;
             $shippingAmount = $dto->shipping_amount ?? 0;
 
-
-
             foreach ($dto->items as $item) {
 
                 $discount = $item['discount_amount'] ?? 0;
