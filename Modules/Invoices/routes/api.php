@@ -15,7 +15,7 @@ use Modules\Invoices\Http\Controllers\InvoicesController;
 */
 Route::prefix('v1')->group(function () {
     Route::apiResource('invoices', InvoicesController::class)
-        ->only(['store', 'show'])
+        ->only(['store', 'show' ,'index'])
         ->names('invoices');
 
     Route::get(

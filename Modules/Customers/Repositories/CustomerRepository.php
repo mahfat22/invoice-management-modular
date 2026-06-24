@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Customers\Repositories; 
+namespace Modules\Customers\Repositories;
 use Modules\Customers\Models\Customer;
 
 class CustomerRepository implements CustomerRepositoryInterface
@@ -28,8 +28,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         return Customer::query()
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('phone', 'like', "%{$search}%") ;
             })
             ->latest()
             ->paginate($perPage);

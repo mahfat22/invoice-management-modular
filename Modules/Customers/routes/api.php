@@ -14,7 +14,7 @@ use Modules\Customers\Http\Controllers\CustomersController;
  *
 */
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1/customers')->group(function () {
 
     Route::get('/', [CustomersController::class, 'index']);
 
@@ -22,7 +22,7 @@ Route::prefix('v1')->group(function () {
 
 
     Route::get(
-        'customers/select',
+        '/select',
         [CustomersController::class, 'select']
     )->name('customers.select');
 });

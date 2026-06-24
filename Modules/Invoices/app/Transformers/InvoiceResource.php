@@ -22,6 +22,7 @@ class InvoiceResource extends JsonResource
             ],
             'subtotal' => (float) $this->subtotal,
             'discount_amount' => (float) $this->discount_amount,
+            'shipping_amount' => (float) $this->shipping_amount,
             'tax_amount' => (float) $this->tax_amount,
             'total_amount' => (float) $this->total_amount,
             'notes' => $this->notes,

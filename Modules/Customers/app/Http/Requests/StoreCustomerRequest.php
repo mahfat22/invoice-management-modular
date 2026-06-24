@@ -1,7 +1,6 @@
 <?php
 
-namespace Modules\Customers\Http\Requests;
-
+namespace Modules\Customers\Http\Requests; 
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCustomerRequest extends FormRequest
@@ -15,8 +14,8 @@ class StoreCustomerRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:20'],
-            'address' => ['nullable', 'string'],  
+            'phone' => ['required', 'numeric', 'string', 'max:20'],
+            'address' => ['nullable', 'string'],
         ];
     }
 }

@@ -23,4 +23,19 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->latest('id')
             ->get();
     }
+
+    public function paginate(
+        int $perPage = 15,
+        ?string $search = null
+    ) {
+        return Invoice::query()
+            ->with([
+                'customer',
+            ])
+            ->when($search, function ($query) use ($search) {
+                $query->where('invoice_number', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate($perPage);
+    }
 }

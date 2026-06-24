@@ -3,6 +3,7 @@
 namespace Modules\Customers\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Modules\Customers\Transformers\CustomerResource;
 use Modules\Customers\Http\Requests\StoreCustomerRequest;
 use Modules\Customers\Services\CustomerService;
 
@@ -14,8 +15,15 @@ class CustomersController extends Controller
 
     public function index()
     {
+
+
+        $customers = $this->customerService->paginate() ;
+
+        
         return response()->success(
-            data: $this->customerService->paginate()
+            data: CustomerResource::collection(
+                $customers
+            )
         );
     }
 
@@ -26,8 +34,8 @@ class CustomersController extends Controller
         );
 
         return response()->success(
-            message: 'Customer created successfully.',
-            data: $customer
+            message: 'تم إنشاء العميل بنجاح',
+            data: new CustomerResource($customer)
         );
     }
 

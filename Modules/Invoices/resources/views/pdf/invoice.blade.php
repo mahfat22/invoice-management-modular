@@ -51,20 +51,15 @@
             <th>الصنف</th>
             <th>الكمية</th>
             <th>السعر</th>
-            <th>الخصم</th>
-            <th>الضريبة</th>
             <th>الإجمالي</th>
         </tr>
-    </thead>
-
+    </thead> 
     <tbody>
         @foreach($invoice->items as $item)
             <tr>
                 <td>{{ $item->item_name }}</td>
                 <td>{{ $item->quantity }}</td>
                 <td>{{ $item->unit_price }}</td>
-                <td>{{ $item->discount_amount }}</td>
-                <td>{{ $item->tax_amount }}</td>
                 <td>{{ $item->line_total }}</td>
             </tr>
         @endforeach

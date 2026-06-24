@@ -14,15 +14,24 @@ class InvoicesController extends Controller
     public function __construct(
         protected InvoiceService $invoiceService
     ) {}
+
+
+    public function index()
+    {
+        $invoices = $this->invoiceService->paginate();
+        return response()->success(
+            data: InvoiceResource::collection($invoices)
+        );
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreInvoiceRequest $request)
+    public function store( StoreInvoiceRequest $request )
     {
         $dto = new CreateInvoiceDTO(
             ...$request->validated()
         );
-
         $invoice = $this->invoiceService->createInvoice($dto);
 
         return response()->success(

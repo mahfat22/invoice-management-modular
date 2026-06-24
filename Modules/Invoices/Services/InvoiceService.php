@@ -27,27 +27,29 @@ class InvoiceService
     public function createInvoice(CreateInvoiceDTO $dto): Invoice
     {
         return DB::transaction(function () use ($dto) {
-            $subtotal = 0;
-            $discountAmount = 0;
-            $taxAmount = 0;
-            $shippingAmount = $dto->shipping_amount ?? 0;
 
+            $subtotal = 0;
+            $items = [];
             foreach ($dto->items as $item) {
 
-                $discount = $item['discount_amount'] ?? 0;
-                $tax = $item['tax_amount'] ?? 0;
+                $lineTotal = $item['quantity'] * $item['unit_price'];
 
-                $lineTotal =
-                    ($item['quantity'] * $item['unit_price'])
-                    - $discount
-                    + $tax;
+                $subtotal += $lineTotal;
 
-                $subtotal += ($item['quantity'] * $item['unit_price']);
-
-                $discountAmount += $discount;
-
-                $taxAmount += $tax;
+                $items[] = [
+                    'item_name'  => $item['item_name'],
+                    'quantity'   => $item['quantity'],
+                    'unit_price' => $item['unit_price'],
+                    'line_total' => $lineTotal,
+                ];
             }
+
+            $discountPercentage = $dto->discount  ?? 0;
+            $taxPercentage = $dto->tax  ?? 0;
+            $discountAmount = ($subtotal * $discountPercentage) / 100;
+            $taxAmount = (($subtotal - $discountAmount) * $taxPercentage) / 100;
+
+            $shippingAmount = $dto->shipping_amount ?? 0;
 
             $invoice = $this->invoiceRepository->create([
                 'customer_id'     => $dto->customer_id,
@@ -55,40 +57,23 @@ class InvoiceService
                 'invoice_date'    => $dto->invoice_date,
                 'subtotal'        => $subtotal,
                 'discount_amount' => $discountAmount,
-                'shipping_amount' => $shippingAmount,
                 'tax_amount'      => $taxAmount,
+                'shipping_amount' => $shippingAmount,
                 'total_amount'    => (
                     $subtotal
                     - $discountAmount
                     + $taxAmount
                     + $shippingAmount
                 ),
-                'status'          => 'draft',
                 'notes'           => $dto->notes,
             ]);
 
-            foreach ($dto->items as $item) {
-
-                $lineTotal =
-                    ($item['quantity'] * $item['unit_price'])
-                    - $item['discount_amount']
-                    + $item['tax_amount'];
-
-                $invoice->items()->create([
-                    'invoice_id'      => $invoice->id,
-                    'item_name'       => $item['item_name'],
-                    'quantity'        => $item['quantity'],
-                    'unit_price'      => $item['unit_price'],
-                    'discount_amount' => $item['discount_amount'],
-                    'tax_amount'      => $item['tax_amount'],
-                    'line_total'      => $lineTotal,
-                ]);
-            }
+            $invoice->items()->createMany($items);
 
             return $invoice->load([
                 'customer',
                 'items',
-            ]);;
+            ]);
         });
     }
 
@@ -101,5 +86,13 @@ class InvoiceService
             : 1;
 
         return 'INV-' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
+    }
+
+    public function paginate()
+    {
+        return $this->invoiceRepository->paginate(
+            perPage: request('per_page', 15),
+            search: request('search')
+        );
     }
 }

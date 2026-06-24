@@ -11,4 +11,6 @@ interface InvoiceRepositoryInterface
     public function findOrFail($id): Invoice;
 
     public function all();
+
+    public function paginate(int $perPage = 15, ?string $search = null);
 }

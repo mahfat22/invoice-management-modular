@@ -40,6 +40,18 @@ class StoreInvoiceRequest extends FormRequest
                 'min:0',
             ],
 
+            'tax' => [
+                'nullable',
+                'numeric',
+                'min:0',
+            ],
+
+            'discount' => [
+                'nullable',
+                'numeric',
+                'min:0',
+            ],
+
             'items.*.item_name' => [
                 'required',
                 'string',
@@ -57,18 +69,6 @@ class StoreInvoiceRequest extends FormRequest
                 'numeric',
                 'min:0',
             ],
-
-            'items.*.discount_amount' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'items.*.tax_amount' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
         ];
     }
 
@@ -80,20 +80,12 @@ class StoreInvoiceRequest extends FormRequest
         return true;
     }
 
-    public function messages(): array
+    public function attributes(): array
     {
         return [
-            'customer_id.required' => 'العميل مطلوب.',
-            'customer_id.exists' => 'العميل غير موجود.',
-
-            'invoice_date.required' => 'تاريخ الفاتورة مطلوب.',
-
-            'items.required' => 'يجب إضافة صنف واحد على الأقل.',
-            'items.min' => 'يجب إضافة صنف واحد على الأقل.',
-
-            'items.*.item_name.required' => 'اسم الصنف مطلوب.',
-            'items.*.quantity.required' => 'الكمية مطلوبة.',
-            'items.*.unit_price.required' => 'سعر الوحدة مطلوب.',
+            'items.*.item_name' => 'اسم الصنف',
+            'items.*.quantity' => 'الكمية',
+            'items.*.unit_price' => 'سعر الوحدة',
         ];
     }
 }
