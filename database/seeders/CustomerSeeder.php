@@ -14,31 +14,25 @@ class CustomerSeeder extends Seeder
     {
         Customer::insert([
             [
-                'name' => 'Ahmed Ali',
-                'phone' => '01000000001', 
+                'name' => 'أحمد علي',
+                'phone' => '01000000001',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Mohamed Hassan',
+                'name' => 'محمد حسن',
                 'phone' => '01000000002',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Omar Samir',
+                'name' => 'عمر سمير',
                 'phone' => '01000000003',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Mahmoud Adel',
-                'phone' => '01000000004',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Khaled Mostafa',
+                'name' => 'خالد مصطفي',
                 'phone' => '01000000005',
                 'created_at' => now(),
                 'updated_at' => now(),

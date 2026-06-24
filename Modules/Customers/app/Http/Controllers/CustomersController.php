@@ -15,12 +15,10 @@ class CustomersController extends Controller
 
     public function index()
     {
-
-
         $customers = $this->customerService->paginate() ;
-
         
-        return response()->success(
+        return response()->paginated(
+            paginator: $customers,
             data: CustomerResource::collection(
                 $customers
             )

@@ -19,7 +19,8 @@ class InvoicesController extends Controller
     public function index()
     {
         $invoices = $this->invoiceService->paginate();
-        return response()->success(
+        return response()->paginated(
+            paginator: $invoices,
             data: InvoiceResource::collection($invoices)
         );
     }

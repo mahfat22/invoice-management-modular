@@ -13,7 +13,7 @@ use Modules\Invoices\Http\Controllers\InvoicesController;
  * is assigned the "api" middleware group. Enjoy building your API!
  *
 */
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::apiResource('invoices', InvoicesController::class)
         ->only(['store', 'show' ,'index'])
         ->names('invoices');

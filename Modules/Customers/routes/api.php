@@ -14,15 +14,16 @@ use Modules\Customers\Http\Controllers\CustomersController;
  *
 */
 
-Route::prefix('v1/customers')->group(function () {
+Route::prefix('v1/customers')
+    ->middleware('auth:sanctum')
+    ->group(function () {
 
-    Route::get('/', [CustomersController::class, 'index']);
+        Route::get('/', [CustomersController::class, 'index']);
 
-    Route::post('/', [CustomersController::class, 'store']);
+        Route::post('/', [CustomersController::class, 'store']);
 
-
-    Route::get(
-        '/select',
-        [CustomersController::class, 'select']
-    )->name('customers.select');
-});
+        Route::get(
+            '/select',
+            [CustomersController::class, 'select']
+        )->name('customers.select');
+    });
