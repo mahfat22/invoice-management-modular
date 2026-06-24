@@ -37,6 +37,7 @@ The project follows a modular architecture using:
 
 * Customers
 * Invoices
+* Auth
 
 ## Installation
 
@@ -93,6 +94,23 @@ Start the development server:
 php artisan serve
 ```
 
+## Default Admin Account
+
+After running the seeders:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Use the following credentials:
+
+| Field    | Value                                         |
+| -------- | --------------------------------------------- |
+| Email    | admin@admin.com                               |
+| Password | password                                      |
+
+> Update the credentials above if your seeder uses different values.
+
 ## Seeded Data
 
 The project includes sample seeded data for testing purposes.
@@ -103,7 +121,25 @@ After running:
 php artisan migrate:fresh --seed
 ```
 
-Sample customer records will be available immediately for testing the API.
+You will have:
+
+* Sample Customers
+* Default Admin User
+* Sample Invoice Data (if available)
+
+## Authentication
+
+Login endpoint:
+
+```http
+POST /api/v1/auth/login
+```
+
+Use the returned token in subsequent requests:
+
+```http
+Authorization: Bearer {token}
+```
 
 ## API Endpoints
 
@@ -205,6 +241,7 @@ GET /api/v1/invoices/1/pdf
 
 ```text
 Modules/
+├── Auth/
 ├── Customers/
 │   ├── Http/
 │   ├── Services/
@@ -234,8 +271,37 @@ This project was built with a focus on:
 
 ## Notes
 
-* Authentication was intentionally excluded to keep the assessment focused on invoice management.
+* All invoice calculations are performed server-side.
 * Inventory management is out of scope.
 * Payments and reporting are out of scope.
-* All invoice calculations are performed server-side.
 * The application uses a modular architecture to improve maintainability and separation of concerns.
+
+## Postman Collection
+
+A Postman collection is included to make testing the API easier.
+
+Import the collection file:
+
+```text
+postman/Invoice Management.postman_collection.json
+```
+
+The collection includes:
+
+* Authentication
+* Customers Endpoints
+* Invoices Endpoints
+* PDF Preview Endpoint
+
+After logging in, set the returned token in the Authorization header:
+
+```http
+Authorization: Bearer {token}
+```
+postman/
+├── Invoices API ( Modules ).postman_collection.json
+
+{
+  "base_url": "http://localhost:8000",
+  "token": ""
+}

@@ -1,0 +1,856 @@
+{
+  "info": {
+    "_postman_id": "7954f1ef-3acb-46c5-be78-9eae445e4129",
+    "name": "Invoices API ( Modules )",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "39962969"
+  },
+  "item": [
+    {
+      "name": "Invoices",
+      "item": [
+        {
+          "name": "Create invoice",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.test(\"Response has success=true\", function () {",
+                  "  pm.expect(json).to.have.property('success', true);",
+                  "});",
+                  "",
+                  "const id = json?.data?.id;",
+                  "if (id) {",
+                  "  pm.collectionVariables.set('invoice_id', String(id));",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": 1,\n  \"invoice_date\": \"2026-06-23\",\n  \"notes\": \"Example invoice from Postman\",\n  \"items\": [\n    {\n      \"item_name\": \"Consulting\",\n      \"quantity\": 2,\n      \"unit_price\": 150,\n      \"discount_amount\": 0,\n      \"tax_amount\": 0\n    }\n  ]\n}\n"
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/v1/invoices",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "v1",
+                "invoices"
+              ]
+            },
+            "description": "Creates an invoice.\n\nRequired keys:\n- customer_id (exists: customers.id)\n- invoice_date (date)\n- items (array, min 1)\n- items.*.item_name\n- items.*.quantity\n- items.*.unit_price\n\nOptional keys:\n- notes\n- items.*.discount_amount\n- items.*.tax_amount\n\nAuth: Laravel Sanctum (Bearer token)."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customer_id\": 1,\n  \"invoice_date\": \"2026-06-23\",\n  \"notes\": \"Example invoice from Postman\",\n  \"shipping_amount\":0,\n  \"tax\":0,\n  \"discount\":0,\n  \"items\": [\n    {\n      \"item_name\": \"Consulting\",\n      \"quantity\": 2,\n      \"unit_price\": 150,\n      \"discount_amount\": 0,\n      \"tax_amount\": 0\n    }\n  ]\n}\n"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}invoices",
+                  "host": [
+                    "{{baseUrl}}invoices"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.29"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 24 Jun 2026 12:13:55 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Invoice created successfully.\",\n    \"data\": {\n        \"id\": 1,\n        \"invoice_number\": \"INV-000001\",\n        \"invoice_date\": \"2026-06-23\",\n        \"customer\": {\n            \"id\": 1,\n            \"name\": \"أحمد علي\"\n        },\n        \"subtotal\": 300,\n        \"discount_amount\": 0,\n        \"shipping_amount\": 0,\n        \"tax_amount\": 0,\n        \"total_amount\": 300,\n        \"notes\": \"Example invoice from Postman\",\n        \"items\": [\n            {\n                \"id\": 1,\n                \"item_name\": \"Consulting\",\n                \"quantity\": 2,\n                \"unit_price\": 150,\n                \"line_total\": 300\n            }\n        ],\n        \"created_at\": \"2026-06-24 12:13:55\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.test(\"Response has success=true\", function () {",
+                  "  pm.expect(json).to.have.property('success', true);",
+                  "});",
+                  "",
+                  "const id = json?.data?.id;",
+                  "if (id) {",
+                  "  pm.collectionVariables.set('invoice_id', String(id));",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": 1,\n  \"invoice_date\": \"2026-06-23\",\n  \"notes\": \"Example invoice from Postman\",\n  \"items\": [\n    {\n      \"item_name\": \"Consulting\",\n      \"quantity\": 2,\n      \"unit_price\": 150,\n      \"discount_amount\": 0,\n      \"tax_amount\": 0\n    }\n  ]\n}\n"
+            },
+            "url": {
+              "raw": "{{baseUrl}}api/v1/invoices",
+              "host": [
+                "{{baseUrl}}api"
+              ],
+              "path": [
+                "v1",
+                "invoices"
+              ]
+            },
+            "description": "Creates an invoice.\n\nRequired keys:\n- customer_id (exists: customers.id)\n- invoice_date (date)\n- items (array, min 1)\n- items.*.item_name\n- items.*.quantity\n- items.*.unit_price\n\nOptional keys:\n- notes\n- items.*.discount_amount\n- items.*.tax_amount\n\nAuth: Laravel Sanctum (Bearer token)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get invoice by id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.test(\"Response has success=true and data.id\", function () {",
+                  "  pm.expect(json).to.have.property('success', true);",
+                  "  pm.expect(json).to.have.nested.property('data.id');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/invoices/{{invoice_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "invoices",
+                "{{invoice_id}}"
+              ]
+            },
+            "description": "Fetch invoice by ID.\n\nTip: Run \"Create invoice\" first; it stores the created id into collection variable `invoice_id`."
+          },
+          "response": [
+            {
+              "name": "200 Ok",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}invoices/{{invoice_id}}",
+                  "host": [
+                    "{{baseUrl}}invoices"
+                  ],
+                  "path": [
+                    "{{invoice_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.29"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 24 Jun 2026 12:15:03 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"invoice_number\": \"INV-000001\",\n        \"invoice_date\": \"2026-06-23\",\n        \"customer\": {\n            \"id\": 1,\n            \"name\": \"أحمد علي\"\n        },\n        \"subtotal\": 300,\n        \"discount_amount\": 0,\n        \"shipping_amount\": 0,\n        \"tax_amount\": 0,\n        \"total_amount\": 300,\n        \"notes\": \"Example invoice from Postman\",\n        \"items\": [\n            {\n                \"id\": 1,\n                \"item_name\": \"Consulting\",\n                \"quantity\": 2,\n                \"unit_price\": 150,\n                \"line_total\": 300\n            }\n        ],\n        \"created_at\": \"2026-06-24 12:13:55\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": [
+            {
+              "name": "Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\t\"email\" :\"admin@admin.com\",\r\n\t\"password\": \"password\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}auth/login",
+                  "host": [
+                    "{{baseUrl}}auth"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.29"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 24 Jun 2026 12:16:04 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Login successful.\",\n    \"data\": {\n        \"user\": {\n            \"id\": 2,\n            \"name\": \"Admin\",\n            \"email\": \"admin@admin.com\",\n            \"email_verified_at\": null,\n            \"created_at\": \"2026-06-24T11:44:07.000000Z\",\n            \"updated_at\": \"2026-06-24T11:44:07.000000Z\"\n        },\n        \"token\": \"3|JlUgvWBjaauGRRZ4Ut0UrBD5ebcQIuX8iHKfxSG86d46a0ba\"\n    }\n}"
+            },
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\t\"email\" :\"admin@admin.com\",\r\n\t\"password\": \"password\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}auth/login",
+                  "host": [
+                    "{{baseUrl}}auth"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.29"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 24 Jun 2026 12:16:04 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Login successful.\",\n    \"data\": {\n        \"user\": {\n            \"id\": 2,\n            \"name\": \"Admin\",\n            \"email\": \"admin@admin.com\",\n            \"email_verified_at\": null,\n            \"created_at\": \"2026-06-24T11:44:07.000000Z\",\n            \"updated_at\": \"2026-06-24T11:44:07.000000Z\"\n        },\n        \"token\": \"3|JlUgvWBjaauGRRZ4Ut0UrBD5ebcQIuX8iHKfxSG86d46a0ba\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "customers",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}customers",
+              "host": [
+                "{{baseUrl}}customers"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Created",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}customers",
+                  "host": [
+                    "{{baseUrl}}customers"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.29"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 24 Jun 2026 12:07:10 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": null,\n    \"data\": [\n        {\n            \"id\": 5,\n            \"name\": \"عميل جديد\",\n            \"phone\": \"01020517909\",\n            \"created_at\": \"24/06/2026\"\n        },\n        {\n            \"id\": 1,\n            \"name\": \"أحمد علي\",\n            \"phone\": \"01000000001\",\n            \"created_at\": \"24/06/2026\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"محمد حسن\",\n            \"phone\": \"01000000002\",\n            \"created_at\": \"24/06/2026\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"عمر سمير\",\n            \"phone\": \"01000000003\",\n            \"created_at\": \"24/06/2026\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"خالد مصطفي\",\n            \"phone\": \"01000000005\",\n            \"created_at\": \"24/06/2026\"\n        }\n    ],\n    \"meta\": {\n        \"pagination\": {\n            \"current_page\": 1,\n            \"last_page\": 1,\n            \"per_page\": 15,\n            \"total\": 5\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "اسم العميل الجديد",
+                  "description": "'required', 'string', 'max:255'",
+                  "type": "text",
+                  "uuid": "ef9871ba-4c98-4edf-87fb-cb08096c3c56"
+                },
+                {
+                  "key": "phone",
+                  "value": "010000000",
+                  "description": "'required', 'numeric', 'string'",
+                  "type": "text",
+                  "uuid": "a5d5d21f-f433-436d-a34b-2ffb9a110968"
+                },
+                {
+                  "key": "address",
+                  "value": "المكان الجديد",
+                  "description": "'nullable', 'string'",
+                  "type": "text",
+                  "uuid": "536fd7f9-85ec-4bd9-ae89-123095b1d379"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}customers",
+              "host": [
+                "{{baseUrl}}customers"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "اسم العميل الجديد",
+                      "description": "'required', 'string', 'max:255'",
+                      "type": "text",
+                      "uuid": "ef9871ba-4c98-4edf-87fb-cb08096c3c56"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "010000000",
+                      "description": "'required', 'numeric', 'string'",
+                      "type": "text",
+                      "uuid": "a5d5d21f-f433-436d-a34b-2ffb9a110968"
+                    },
+                    {
+                      "key": "address",
+                      "value": "المكان الجديد",
+                      "description": "'nullable', 'string'",
+                      "type": "text",
+                      "uuid": "536fd7f9-85ec-4bd9-ae89-123095b1d379"
+                    }
+                  ],
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}customers",
+                  "host": [
+                    "{{baseUrl}}customers"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "",
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.29"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 24 Jun 2026 12:20:35 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"success\": true,\n    \"message\": \"تم إنشاء العميل بنجاح\",\n    \"data\": {\n        \"id\": 6,\n        \"name\": \"اسم العميل الجديد\",\n        \"phone\": \"010000000\",\n        \"created_at\": \"24/06/2026\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Select",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}customers/select",
+                  "host": [
+                    "{{baseUrl}}customers"
+                  ],
+                  "path": [
+                    "select"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Server",
+                  "value": "nginx/1.25.2"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.29"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Wed, 24 Jun 2026 12:10:06 GMT"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"أحمد علي\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"خالد مصطفي\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"عمر سمير\"\n        },\n        {\n            \"id\": 5,\n            \"name\": \"عميل جديد\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"محمد حسن\"\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "invoice_id",
+      "value": ""
+    }
+  ]
+}
