@@ -14,6 +14,7 @@ A simple modular Invoice Management System built with Laravel 12 and Laravel Mod
 * Service Layer
 * DTOs
 * API Resources
+* Database Seeders
 
 ## Tech Stack
 
@@ -32,7 +33,7 @@ The project follows a modular architecture using:
 * DTOs
 * API Resources
 
-Modules:
+### Modules
 
 * Customers
 * Invoices
@@ -64,12 +65,26 @@ Generate application key:
 php artisan key:generate
 ```
 
-Configure database credentials in `.env`.
+Configure your database credentials inside the `.env` file.
 
-Run migrations:
+Create the database:
+
+```sql
+CREATE DATABASE invoice_management
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+```
+
+Run migrations and seeders:
 
 ```bash
-php artisan migrate
+php artisan migrate:fresh --seed
+```
+
+Clear caches (recommended):
+
+```bash
+php artisan optimize:clear
 ```
 
 Start the development server:
@@ -78,15 +93,17 @@ Start the development server:
 php artisan serve
 ```
 
-## Database
+## Seeded Data
 
-Create a MySQL database before running migrations:
+The project includes sample seeded data for testing purposes.
 
-```sql
-CREATE DATABASE invoice_management
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci;
+After running:
+
+```bash
+php artisan migrate:fresh --seed
 ```
+
+Sample customer records will be available immediately for testing the API.
 
 ## API Endpoints
 
@@ -104,12 +121,20 @@ GET /api/v1/customers
 POST /api/v1/customers
 ```
 
-### Invoices
-
-#### Create Invoice
+#### Customer Select Endpoint
 
 ```http
-POST /api/v1/invoices
+GET /api/v1/customers/select
+```
+
+---
+
+### Invoices
+
+#### List Invoices
+
+```http
+GET /api/v1/invoices
 ```
 
 #### Get Invoice
@@ -118,10 +143,10 @@ POST /api/v1/invoices
 GET /api/v1/invoices/{id}
 ```
 
-#### List Invoices
+#### Create Invoice
 
 ```http
-GET /api/v1/invoices
+POST /api/v1/invoices
 ```
 
 #### Invoice PDF Preview
@@ -137,14 +162,14 @@ GET /api/v1/invoices/{id}/pdf
   "customer_id": 1,
   "invoice_date": "2026-06-23",
   "shipping_amount": 50,
+  "tax": 25,
+  "discount": 10,
   "notes": "Test invoice",
   "items": [
     {
       "item_name": "Laptop",
       "quantity": 2,
-      "unit_price": 1000,
-      "discount_amount": 100,
-      "tax_amount": 50
+      "unit_price": 1000, 
     }
   ]
 }
@@ -162,6 +187,8 @@ Calculated values include:
 * Shipping Amount
 * Total Amount
 
+This ensures that invoice totals cannot be manipulated from the client side.
+
 ## PDF Preview
 
 The system provides a simple Arabic RTL invoice PDF preview generated using:
@@ -174,9 +201,41 @@ Example:
 GET /api/v1/invoices/1/pdf
 ```
 
+## Project Structure
+
+```text
+Modules/
+├── Customers/
+│   ├── Http/
+│   ├── Services/
+│   ├── Repositories/
+│   ├── DTOs/
+│   └── Resources/
+│
+├── Invoices/
+│   ├── Http/
+│   ├── Services/
+│   ├── Repositories/
+│   ├── DTOs/
+│   ├── Resources/
+│   └── PDF/
+```
+
+## Development Notes
+
+This project was built with a focus on:
+
+* Clean Architecture
+* Modular Design
+* Separation of Concerns
+* Maintainability
+* Scalability
+* Testability
+
 ## Notes
 
-* Authentication is intentionally omitted as requested in the assessment.
+* Authentication was intentionally excluded to keep the assessment focused on invoice management.
 * Inventory management is out of scope.
 * Payments and reporting are out of scope.
-* Focus was placed on clean architecture, server-side validation, invoice calculations, and PDF generation.
+* All invoice calculations are performed server-side.
+* The application uses a modular architecture to improve maintainability and separation of concerns.
